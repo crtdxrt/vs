@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Papa's Pizzeria</title>
+        <meta name="robots" content="noindex, nofollow">
+			<script src="https://openprocessing.org/openprocessing_sketch.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/p5.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.11.3/lib/addons/p5.sound.min.js"></script>
+			<script src="mySketch.js"></script>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container"></div>
+
+        <script>
+            window.RufflePlayer = window.RufflePlayer || {};
+            window.RufflePlayer.config = {
+                autoplay: "on",
+                contextMenu: false,
+                unmuteOverlay: "hidden",
+            };
+            document.addEventListener("DOMContentLoaded", function () {
+                let swf = 'https://cdn.jsdelivr.net/gh/maxplayzreal/Flash-Games-SWF@main/papaspizzeria.swf';
+                if (swf) {
+                    let ruffle = window.RufflePlayer.newest();
+                    let player = Object.assign(document.getElementById("container").appendChild(ruffle.createPlayer()), {
+                        style: 'width: 100vw; height: 100vh',
+                    });
+                                      player.load({
+                        url: 'https://cdn.jsdelivr.net/gh/maxplayzreal/Flash-Games-SWF@main/papaspizzeria.swf'
+                    });  
+
+                }
+            });
+        </script>
+
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>
+
+        <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    </body>
+</html>
