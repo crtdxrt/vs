@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Playable Game</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Press Start 2P', cursive;
+        }
+
+        #startButton {
+            display: block;
+            width: 200px;
+            height: 50px;
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            font-size: 16px;
+            margin: 40px auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 0 10px 2px #000;
+        }
+
+        #game {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="game"></div>
+    <button id="startButton">PLAY</button>
+
+    <script>
+        function startGame() {
+            document.getElementById("startButton").style.display = "none";
+            document.getElementById("game").style.display = "block";
+
+            // EmulatorJS config
+            window.EJS_player = "#game";
+            window.EJS_core = "psx";
+            window.EJS_color = "#000000";
+            window.EJS_startOnLoaded = true;
+
+            // UNIVERSAL new emulatorjs working path
+            window.EJS_pathtodata = "https://cdn.jsdelivr.net/gh/ethanaobrien/emulatorjs@latest/data";
+
+            window.EJS_gameUrl = "https://bbcdn.githack.com/johnbones/john/raw/main/PaRappa%20the%20Rapper%20(USA)%20(En,Fr,De,Es,It).zip";
+
+            // Load emulator
+            let s = document.createElement("script");
+            s.src = window.EJS_pathtodata + "/loader.js";
+            document.body.appendChild(s);
+        }
+
+        document.getElementById("startButton").addEventListener("click", startGame);
+    </script>
+
+</body>
+</html>
