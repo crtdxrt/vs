@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Astatine 2 — Creators</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Zrnic&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins','Zrnic',sans-serif; }
+html,body { height:100%; }
+body { background:#080808; color:white; overflow:hidden; }
+#snow { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-2; }
+
+/* Borders */
+.left-border, .right-border {
+  position:fixed; top:0; width:50px; height:100%;
+  background:linear-gradient(180deg, rgba(0,200,80,0.06), rgba(255,255,255,0.02));
+  box-shadow:0 0 18px rgba(0,200,80,0.06);
+  z-index:1;
+}
+.right-border{right:0;} .left-border{left:0;}
+
+/* Container */
+.container{
+  margin:60px auto 120px auto; max-width:1200px;
+  width:80%; text-align:center;
+  position:relative; z-index:2;
+  padding:24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.15));
+  backdrop-filter: blur(8px);
+  border-radius:18px; border:1px solid rgba(255,255,255,0.03);
+}
+
+/* Title */
+.title{ font-size:3em; font-weight:700; margin-bottom:10px; text-shadow:0 0 12px #fffaa; }
+.subtitle{ font-size:1.2em; margin-bottom:20px; text-shadow:0 0 8px #00c850aa; }
+
+/* Navigation buttons */
+.bottom-buttons{
+  display:flex; justify-content:center; gap:15px; margin-bottom:35px;
+}
+.bottom-buttons a{
+  padding:8px 20px; background:#fff; color:#000; font-weight:600;
+  border-radius:16px; text-decoration:none; font-size:1em;
+  box-shadow:0 0 10px #ffffff33; transition:0.18s;
+}
+.bottom-buttons a.selected, .bottom-buttons a:hover{
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 0 20px #ffffff66;
+}
+
+/* Creator Grid */
+.creator-grid{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:30px; justify-items:center;
+}
+.creator-card{
+  width:180px; background:#151515; border-radius:18px;
+  padding:20px 15px; border:1px solid #2e2e2e;
+  text-align:center; transition:0.3s; cursor:pointer;
+  box-shadow:0 0 10px #00000055; display:flex; flex-direction:column; align-items:center;
+}
+.creator-card.selected, .creator-card:hover{
+  transform:scale(1.05); border-color:#00c850; box-shadow:0 0 18px #00c850aa;
+}
+.creator-card img{ width:90px; height:90px; border-radius:100%; object-fit:cover; border:3px solid #00c85055; margin-bottom:10px; }
+.creator-name{ font-size:1.2em; font-weight:600; margin-bottom:5px; }
+.creator-role{ font-size:0.9em; color:#bbbbbb; margin-bottom:10px; }
+.creator-link{ font-size:0.9em; font-weight:600; color:#00c850; }
+
+footer{
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(0,0,0,0.5);
+  text-align:center; padding:10px 0; font-weight:600; color:#fff;
+  text-shadow:0 0 6px rgba(255,240,200,0.06); font-size:0.9em; z-index:3;
+}
+
+/* Fade overlay */
+#fadeOverlay{
+  position:fixed; inset:0; z-index:9999;
+  background:#000; opacity:0; pointer-events:none;
+  transition:opacity .7s ease;
+}
+</style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+<div class="left-border"></div>
+<div class="right-border"></div>
+
+<div class="container">
+  <div class="title">Creators</div>
+  <div class="subtitle">Meet the team behind Astatine 2!</div>
+
+  <div class="bottom-buttons" id="navButtons">
+        <a href="games.html">Games</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQ7NJteMMv1LPDKMUy9KmJ2k607OQvxXFGvpQ-jm5UPMhIcQ/viewform?usp=header">Request Game</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="creator-grid" id="creatorGrid">
+    <div class="creator-card" data-link="#"><img src="pfp1.png"><div class="creator-name">crtdxrt</div><div class="creator-role">Lead Developer</div><div class="creator-link">i like punch-out</div></div>
+    <div class="creator-card" data-link="#"><img src="defnoto.png"><div class="creator-name">DefnotO</div><div class="creator-role">Lead Alpha Tester</div><div class="creator-link">"I'm just a game tester?" - O</div></div>
+  </div>
+</div>
+
+<footer>Website by <strong>crtdxrt</strong> — 2025</footer>
+<div id="fadeOverlay"></div>
+
+<script>
+/* ---------- Snow ---------- */
+const canvas=document.getElementById('snow');
+const ctx=canvas.getContext('2d');
+let W=canvas.width=window.innerWidth,H=canvas.height=window.innerHeight;
+window.addEventListener('resize', ()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
+const flakes=[]; for(let i=0;i<180;i++){ flakes.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,s:Math.random()*1+0.3}); }
+function draw(){ ctx.clearRect(0,0,W,H); ctx.fillStyle="rgba(255,255,255,0.5)"; ctx.beginPath(); flakes.forEach(f=>{ctx.moveTo(f.x,f.y);ctx.arc(f.x,f.y,f.r,0,Math.PI*2);}); ctx.fill(); flakes.forEach(f=>{ f.y+=f.s; if(f.y>H) f.y=-10; }); requestAnimationFrame(draw); }
+draw();
+
+/* ---------- Keyboard Navigation ---------- */
+const cards=[...document.querySelectorAll('.creator-card')];
+let selectedIndex=0;
+function updateSelection(){ cards.forEach((c,i)=>c.classList.toggle('selected',i===selectedIndex)); cards[selectedIndex].scrollIntoView({behavior:'smooth', block:'nearest'}); }
+updateSelection();
+
+window.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight'){ selectedIndex=Math.min(cards.length-1,selectedIndex+1); updateSelection(); e.preventDefault();}
+  else if(e.key==='ArrowLeft'){ selectedIndex=Math.max(0,selectedIndex-1); updateSelection(); e.preventDefault();}
+  else if(e.key==='ArrowDown'){ selectedIndex=Math.min(cards.length-1,selectedIndex+2); updateSelection(); e.preventDefault();}
+  else if(e.key==='ArrowUp'){ selectedIndex=Math.max(0,selectedIndex-2); updateSelection(); e.preventDefault();}
+  else if(e.key==='Enter'){ window.location.href=cards[selectedIndex].dataset.link; e.preventDefault(); }
+});
+</script>
+
+</body>
+</html>
+

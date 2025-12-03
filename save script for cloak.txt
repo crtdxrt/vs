@@ -1,0 +1,32 @@
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>

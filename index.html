@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Astatine 2</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body { background:#0e0e0e; color:white; overflow:hidden; }
+
+/* Slim center container */
+.container {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  width:70%;
+  animation:floaty 6s ease-in-out infinite;
+}
+
+/* Title */
+.title {
+  font-size:3.8em; font-weight:700;
+  color:#ffffff;
+  text-shadow:0 0 20px #ffffffaa,0 0 12px #9b59b6aa;
+  animation:zoomPulse 4s ease-in-out infinite;
+}
+
+/* Splash */
+#splash2 {
+  font-size:1.4em;
+  color:#fff;
+  margin-top:15px; margin-bottom:35px;
+  text-shadow:0 0 8px #fffaa,0 0 12px #9b59b6aa;
+  animation:floatGlow 3s ease-in-out infinite;
+}
+
+/* Navigation buttons */
+.buttons { display:flex; justify-content:center; gap:18px; flex-wrap:wrap; }
+.buttons a {
+  padding:10px 25px; background:#fff; color:#000;
+  font-weight:600; border-radius:18px; text-decoration:none;
+  font-size:1.15em; transition:0.3s;
+  box-shadow:0 0 10px #ffffff55;
+}
+.buttons a:hover {
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 0 20px #ffffffaa;
+}
+
+/* Animations */
+@keyframes zoomPulse {
+  0%,100%{transform:scale(1);}
+  50%{transform:scale(1.07);}
+}
+@keyframes floatGlow {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-6px); }
+}
+@keyframes floaty {
+  0%,100%{transform:translate(-50%,-50%) translateY(0);}
+  50%{transform:translate(-50%,-50%) translateY(-10px);}
+}
+
+/* Snow */
+#snow {
+  position:fixed; top:0; left:0;
+  width:100%; height:100%;
+  pointer-events:none;
+  z-index:-1;
+}
+
+/* ❄ Borders (white glow) */
+.side-border {
+  position:fixed;
+  top:0; width:60px; height:100%;
+  background:rgba(255,255,255,0.06);
+  border-left:2px solid rgba(255,255,255,0.4);
+  border-right:2px solid rgba(255,255,255,0.4);
+  box-shadow:0 0 12px #ffffffaa;
+  z-index:5;
+}
+#leftBorder { left:0; }
+#rightBorder { right:0; }
+
+/* ⭐ Rare GIF event animation */
+.rareGif {
+  position:fixed;
+  width:200px; height:auto;
+  opacity:0;
+  z-index:10;
+  animation:rareFade 3.5s ease-in-out forwards;
+}
+
+@keyframes rareFade {
+  0% { transform:scale(0.2) translateY(40px); opacity:0; }
+  20% { transform:scale(1.1) translateY(0); opacity:1; }
+  60% { transform:scale(1) opacity:1; }
+  100% { transform:scale(0.2) translateY(-40px); opacity:0; }
+}
+</style>
+</head>
+<body>
+
+<!-- White glowing borders -->
+<div id="leftBorder" class="side-border"></div>
+<div id="rightBorder" class="side-border"></div>
+
+<canvas id="snow"></canvas>
+
+<div class="container">
+  <div class="title">Astatine 2</div>
+  <div class="splash" id="splash2"></div>
+
+  <div class="buttons">
+    <a href="games.html">Games</a>
+    <a href="creators.html">Creators</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdQ7NJteMMv1LPDKMUy9KmJ2k607OQvxXFGvpQ-jm5UPMhIcQ/viewform?usp=header">Request Game</a>
+    <a href="settings2.html">Settings</a>
+  </div>
+</div>
+
+<script>
+/* Random splash */
+const splashes2 = [
+  "Games for Everyone","New year, new look","Astatine is an element.","Gaming, but better.",
+  "Stay in School.","When you just wanna play a game","Please request more games","Retro page coming soon",
+  "Uh","Wii Sports soon","idk man play a game","Chuck E. Cheese but cooler",
+  "cornhub lol","Rylan we're adding Retro Bowl","bro","Alpha 2 out"
+];
+document.getElementById("splash2").textContent =
+  splashes2[Math.floor(Math.random()*splashes2.length)];
+
+/* Snow */
+const canvas=document.getElementById("snow"), ctx=canvas.getContext("2d");
+let W,H; function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize(); window.onresize=resize;
+
+const flakes=[]; 
+for(let i=0;i<170;i++){ flakes.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,s:Math.random()*1+0.3}); }
+function draw(){ ctx.clearRect(0,0,W,H); ctx.fillStyle="rgba(255,255,255,0.5)";
+  ctx.beginPath(); flakes.forEach(f=>{ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true); }); ctx.fill(); move(); }
+function move(){ flakes.forEach(f=>{ f.y+=f.s; if(f.y>H) f.y=-10; }); }
+setInterval(draw,30);
+
+
+/* ⭐⭐⭐ MULTI-GIF RARE EVENT SYSTEM ⭐⭐⭐ */
+const rareEvents = [
+  { src: "mario-dance.gif", chance: 50 },
+  { src: "weegee.gif",      chance: 50 },
+  { src: "yoshi.gif",       chance: 50 }
+];
+
+// spawn helper
+function spawnRareGif(src) {
+  const gif = document.createElement("img");
+  gif.src = src;
+  gif.className = "rareGif";
+
+  // random placement
+  gif.style.left = Math.random() * (window.innerWidth - 200) + "px";
+  gif.style.top  = Math.random() * (window.innerHeight - 200) + "px";
+
+  document.body.appendChild(gif);
+
+  // remove after animation
+  setTimeout(()=> gif.remove(), 4000);
+}
+
+// roll ALL rare events
+rareEvents.forEach(event => {
+  if (Math.random() < 1 / event.chance) {
+    spawnRareGif(event.src);
+  }
+});
+</script>
+
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>
+
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>
+
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MC LAUNCHER</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+body { 
+  background:#0e0e0e; 
+  color:white; 
+  /* overflow:hidden; <-- THIS WAS REMOVED TO ALLOW SCROLLING */ 
+}
+
+/* Snow Layer */
+#snow { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-1; }
+
+/* Container for page content */
+.container {
+  /* --- CHANGED --- */
+  /* These lines were removed to allow the container to flow normally */
+  /* position:absolute; top:50%; left:50%; */
+  /* transform:translate(-50%,-50%); */
+  
+  /* --- ADDED --- */
+  /* This centers the container horizontally and adds space at the top and bottom */
+  margin: 60px auto 100px auto;
+  max-width: 1400px; /* Good for very wide screens */
+
+  /* --- KEPT --- */
+  width:80%; 
+  text-align:center;
+}
+
+/* Title */
+.title {
+  font-size:3.5em; font-weight:700;
+  color:#fff; text-shadow:0 0 12px #fffaa;
+  margin-bottom:10px;
+}
+
+/* Subtitle / Game Counter */
+.subtitle {
+  font-size:1.5em; font-weight:600;
+  margin-bottom:25px;
+  text-shadow:0 0 8px #fffcc0;
+}
+
+/* Navigation buttons under subtitle */
+.bottom-buttons {
+  display:flex; justify-content:center; gap:15px; margin-bottom:25px;
+}
+.bottom-buttons a {
+  padding:10px 25px; background:#fff; color:#000;
+  font-weight:600; border-radius:18px; text-decoration:none;
+  font-size:1.1em; box-shadow:0 0 10px #ffffff55;
+  transition:0.3s;
+}
+.bottom-buttons a:hover { transform:translateY(-3px) scale(1.05); box-shadow:0 0 20px #ffffffaa; }
+
+/* Game Grid */
+.game-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:20px;
+  justify-items:center;
+}
+
+/* Game Card */
+.game-card {
+  position:relative;
+  width:150px; height:150px;
+  border-radius:15px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform 0.3s;
+}
+.game-card img {
+  width:100%; height:100%; object-fit:cover;
+  border-radius:15px;
+  display:block;
+}
+.game-card:hover { transform:scale(1.05); }
+
+/* Overlay for game name */
+.game-overlay {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,0.5);
+  display:flex; justify-content:center; align-items:center;
+  opacity:0; transition:0.3s;
+}
+.game-card:hover .game-overlay { opacity:1; }
+.game-overlay p {
+  color:white; font-weight:600; font-size:1em;
+  text-shadow:0 0 8px #fffcc0;
+  text-align:center;
+}
+
+/* Left/Right Borders */
+.left-border, .right-border {
+  position:fixed; top:0; width:50px; height:100%;
+  background:rgba(255,255,255,0.05);
+  box-shadow:0 0 8px #ffffff88;
+  z-index:1;
+}
+.right-border { right:0; }
+.left-border { left:0; }
+
+/* Footer Bar */
+footer {
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(0,0,0,0.5);
+  text-align:center; padding:8px 0;
+  font-weight:600; color:#fff;
+  text-shadow:0 0 6px #fffcc0;
+  font-size:0.9em;
+}
+</style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+
+<div class="left-border"></div>
+<div class="right-border"></div>
+
+<div class="container">
+  <div class="title">Minecraft Launcher</div>
+  <div class="subtitle" id="gameCount"></div>
+  <div class="game-grid" id="gameGrid"></div>
+</div>
+
+<footer>Website by <strong>crtdxrt</strong> — 2025</footer>
+
+<script>
+/* Snow */
+const canvas=document.getElementById("snow"), ctx=canvas.getContext("2d");
+let W,H;
+function resize(){ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; }
+resize(); window.onresize=resize;
+
+const flakes=[]; 
+for(let i=0;i<170;i++){ flakes.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*3+1,s:Math.random()*1+0.3}); }
+function draw(){ 
+  ctx.clearRect(0,0,W,H); 
+  ctx.fillStyle="rgba(255,255,255,0.5)"; 
+  ctx.beginPath(); 
+  flakes.forEach(f=>{ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2,true); }); 
+  ctx.fill(); 
+  move(); 
+}
+function move(){ flakes.forEach(f=>{ f.y+=f.s; if(f.y>H) f.y=-10; }); }
+setInterval(draw,30);
+
+/* Game List */
+const games = [
+  { name:'Eaglercraft 1.12', img:'eaglercraft1.12/eag1.12.png', link:'eaglercraft1.12/eaglercraft1.12.html' },
+  { name:'Minecraft Beta 1.3', img:'eaglercraft1.12/eag1.12.png', link:'mcbeta/mcbeta.html' },
+    { name:'Minecraft 1.5.2', img:'eaglercraft1.12/eag1.12.png', link:'mc1.5.2/mc1.5.2.html' },
+    { name:'Minecraft 1.8.8', img:'eaglercraft1.12/eag1.12.png', link:'mc1.8.8/mc1.8.8.html' },
+];
+
+// Sort games alphabetically
+games.sort((a,b)=>a.name.localeCompare(b.name));
+
+document.getElementById("gameCount").textContent = `Select one of ${games.length} versions!`;
+
+const grid = document.getElementById("gameGrid");
+games.forEach(g=>{
+  const card = document.createElement('div'); card.className='game-card';
+  card.innerHTML = `<img src="${g.img}"><div class="game-overlay"><p>${g.name}</p></div>`;
+  card.onclick = ()=>window.location.href=g.link;
+  grid.appendChild(card);
+});
+</script>
+
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>
+
+
+</body>
+</html>

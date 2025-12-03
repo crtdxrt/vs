@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Astatine 2 — Settings</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Zrnic&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+
+@font-face {
+  font-family: 'Zrnic';
+  src: url('fonts/Zrnic.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Zrnic', 'Poppins', sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins','Zrnic',sans-serif; }
+html,body { height:100%; }
+body {
+  background:#080808;
+  color:white;
+  overflow:hidden;
+}
+
+/* Snow canvas */
+#snow { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:-2; }
+
+/* Left/Right Borders */
+.left-border, .right-border {
+  position:fixed; top:0; width:50px; height:100%;
+  background:linear-gradient(180deg, rgba(0,200,80,0.06), rgba(255,255,255,0.02));
+  box-shadow:0 0 18px rgba(0,200,80,0.06);
+  z-index:1;
+}
+.right-border { right:0; }
+.left-border { left:0; }
+
+/* Frosted container */
+.container {
+  margin: 60px auto 120px auto;
+  max-width: 800px;
+  width:80%;
+  text-align:center;
+  position:relative;
+  z-index:2;
+  padding:24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(0,0,0,0.15));
+  backdrop-filter: blur(8px);
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,0.03);
+}
+
+/* Title */
+.title { font-size:3em; font-weight:700; margin-bottom:20px; text-shadow:0 0 12px #fffaa; }
+
+/* Navigation buttons */
+.bottom-buttons {
+  display:flex; justify-content:center; gap:15px; margin-bottom:35px;
+}
+.bottom-buttons a {
+  padding:8px 20px; background:#fff; color:#000;
+  font-weight:600; border-radius:16px; text-decoration:none;
+  font-size:1em; box-shadow:0 0 10px #ffffff33;
+  transition:0.18s;
+}
+.bottom-buttons a.selected, .bottom-buttons a:hover {
+  transform:translateY(-3px) scale(1.05);
+  box-shadow:0 0 20px #ffffff66;
+}
+
+/* Settings items */
+.setting-item {
+  padding:14px 22px;
+  background:#151515;
+  color:white;
+  border-radius:14px;
+  font-weight:600;
+  font-size:1.2em;
+  cursor:pointer;
+  margin:12px 0;
+  box-shadow:0 0 12px #00000055;
+  transition:0.3s;
+  display:block;
+  text-align:center;
+}
+.setting-item.selected, .setting-item:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 18px #00c850aa;
+  background:#1a1a1a;
+}
+
+/* Dropdown */
+select {
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:1.1em;
+}
+footer {
+  position:fixed; bottom:0; left:0; right:0;
+  background:rgba(0,0,0,0.5);
+  text-align:center; padding:10px 0;
+  font-weight:600; color:#fff;
+  text-shadow:0 0 6px rgba(255,240,200,0.06);
+  font-size:0.9em;
+  z-index:3;
+}
+
+/* Fade overlay for action feedback */
+#fadeOverlay {
+  position:fixed; inset:0; z-index:9999;
+  background:#000; opacity:0; pointer-events:none;
+  transition:opacity .7s ease;
+}
+</style>
+</head>
+<body>
+
+<canvas id="snow"></canvas>
+<div class="left-border"></div>
+<div class="right-border"></div>
+
+<div class="container">
+  <div class="title">Settings</div>
+
+  <div class="bottom-buttons" id="navButtons">
+    <a href="creators.html">Creators</a>
+    <a href="settings.html">Settings</a>
+  </div>
+
+  <div class="setting-item" data-type="action" id="toggleBlank">Toggle about:blank Mode</div>
+
+  <div style="margin-top:20px; font-size:1.2em; text-shadow:0 0 8px #00c850aa;">Tab Cloak</div>
+  <select class="setting-item" id="cloakSelect" data-type="select">
+    <option value="none">None</option>
+    <option value="drive">Google Drive</option>
+    <option value="classroom">Google Classroom</option>
+    <option value="docs">Google Docs</option>
+  </select>
+</div>
+
+<footer>Website by <strong>crtdxrt</strong> — 2025</footer>
+<div id="fadeOverlay"></div>
+
+<script>
+/* ---------- Snow Background ---------- */
+const canvas = document.getElementById('snow');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = window.innerWidth;
+let H = canvas.height = window.innerHeight;
+window.addEventListener('resize', ()=>{ W=canvas.width=window.innerWidth; H=canvas.height=window.innerHeight; });
+
+const flakes=[];
+for(let i=0;i<180;i++){
+  flakes.push({x:Math.random()*W, y:Math.random()*H, r:Math.random()*3+1, s:Math.random()*1+0.3});
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle="rgba(255,255,255,0.5)";
+  ctx.beginPath();
+  flakes.forEach(f=>{ ctx.moveTo(f.x,f.y); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); });
+  ctx.fill();
+  flakes.forEach(f=>{ f.y+=f.s; if(f.y>H) f.y=-10; });
+  requestAnimationFrame(draw);
+}
+draw();
+
+/* ---------- About:Blank ---------- */
+let blankEnabled=false;
+document.getElementById('toggleBlank').addEventListener('click', ()=> {
+  blankEnabled=!blankEnabled;
+  if(blankEnabled){
+    document.body.innerHTML='';
+    document.body.style.background='white';
+    document.addEventListener('click', ()=>location.reload());
+  }
+});
+
+/* ---------- Tab Cloak ---------- */
+function applyCloak(){ 
+  const val=document.getElementById("cloakSelect").value;
+  localStorage.setItem("cloakMode", val);
+  setCloak(val);
+}
+function setCloak(mode){
+  let icon=""; let title="Astatine";
+  if(mode==="drive"){ icon="gdrive.png"; title="My Drive - Google Drive"; }
+  if(mode==="classroom"){ icon="classroom.png"; title="Classes"; }
+  if(mode==="docs"){ icon="gdocs.png"; title="Google Docs"; }
+  let link=document.querySelector("link[rel~='icon']");
+  if(!link){ link=document.createElement("link"); link.rel="icon"; document.head.appendChild(link); }
+  if(icon) link.href=icon;
+  document.title=title;
+  document.getElementById("cloakSelect").value=mode;
+}
+document.getElementById("cloakSelect").addEventListener('change', applyCloak);
+window.onload=()=>{ setCloak(localStorage.getItem("cloakMode")||"none"); };
+
+/* ---------- Keyboard Navigation ---------- */
+const items=[...document.querySelectorAll('.bottom-buttons a'), document.getElementById('toggleBlank'), document.getElementById('cloakSelect')];
+let selectedIndex=0;
+function updateSelection(){ items.forEach((i,idx)=>i.classList.toggle('selected', idx===selectedIndex)); }
+updateSelection();
+
+window.addEventListener('keydown', e=>{
+  if(e.key==='ArrowDown'){ selectedIndex=Math.min(items.length-1, selectedIndex+1); updateSelection(); e.preventDefault(); }
+  else if(e.key==='ArrowUp'){ selectedIndex=Math.max(0, selectedIndex-1); updateSelection(); e.preventDefault(); }
+  else if(e.key==='Enter'){
+    const sel=items[selectedIndex];
+    if(sel.tagName==='A') window.location.href=sel.href;
+    else if(sel.dataset.type==='action') sel.click();
+    else if(sel.tagName==='SELECT') sel.focus();
+  }
+});
+</script>
+</body>
+</html>
