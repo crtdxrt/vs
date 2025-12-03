@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>BitLife (9:16)</title>
+  <link rel="icon" type="image/png" href="icon.png">
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* Wrapper maintaining 9:16 aspect ratio */
+    #gameWrapper {
+      width: 100%;
+      height: 100%;
+      max-width: calc(100vh * 9 / 16);
+      max-height: 100vh;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    #gameContainer {
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+  </style>
+
+  <!-- Unity Loader -->
+  <script src="https://cdn.jsdelivr.net/gh/a456pur/seraph@ae2fcc6d6a9cd051654fcc0519080db1f79cf2a7/games/bitlife/TemplateData/UnityProgress.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/a456pur/seraph@ae2fcc6d6a9cd051654fcc0519080db1f79cf2a7/games/bitlife/Build/UnityLoader.js"></script>
+</head>
+<body>
+  <div id="gameWrapper">
+    <div id="gameContainer"></div>
+  </div>
+
+  <script>
+    // Unity instantiation
+    var unityInstance = UnityLoader.instantiate(
+      "gameContainer",
+      "https://cdn.jsdelivr.net/gh/a456pur/seraph@ae2fcc6d6a9cd051654fcc0519080db1f79cf2a7/games/bitlife/Build/BitLife.json",
+      { onProgress: UnityProgress }
+    );
+  </script>
+
+<script>
+window.onload = function() {
+  const mode = localStorage.getItem("cloakMode");
+  if (!mode) return;
+
+  let icon = "";
+  let title = document.title;
+
+  if (mode === "drive") {
+    icon = "gdrive.png";
+    title = "My Drive - Google Drive";
+  }
+  if (mode === "classroom") {
+    icon = "classroom.png";
+    title = "Classes";
+  }
+  if (mode === "docs") {
+    icon = "gdocs.png";
+    title = "Google Docs";
+  }
+
+  let link = document.querySelector("link[rel~='icon']");
+  if (!link) {
+    link = document.createElement("link");
+    link.rel = "icon";
+    document.head.appendChild(link);
+  }
+  if (icon) link.href = icon;
+
+  document.title = title;
+}
+</script>
+
+</body>
+</html>

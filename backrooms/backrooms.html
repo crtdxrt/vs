@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Classes</title>
+
+<!-- Favicon (optional) -->
+<link rel="icon" type="image/png" href="Classes.png">
+
+<!-- Styles -->
+<style>
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow-y: auto; /* 🔥 makes page scrollable */
+        background: #000;
+    }
+
+    #button {
+        display: none;
+    }
+
+    .imgb_vis {
+        animation: imgb-animation 7s linear;
+    }
+
+    @keyframes imgb-animation {
+        10% { transform: translateX(0); }
+        20% { transform: translateX(100px); }
+        90% { transform: translateX(100px); }
+        100% { transform: translateX(0); }
+    }
+
+    .webgl-content {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+
+    #gameContainer {
+        width: 100%;
+        height: 100vh; /* fullscreen game */
+        background-size: cover;
+        background-position: center;
+        position: relative;
+    }
+</style>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-MENBM6GSNY"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-MENBM6GSNY");
+</script>
+
+<!-- Unity Loader -->
+<script src="https://cdn.jsdelivr.net/gh/aKevbo/lumassets@39dcf72cfd3d38396758105fcd0a41ac651a0bc1/backrooms/TemplateData/UnityProgress.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/aKevbo/lumassets@39dcf72cfd3d38396758105fcd0a41ac651a0bc1/backrooms/Build/UnityLoader.js"></script>
+
+</head>
+<body>
+
+<div class="webgl-content">
+    <div id="gameContainer"
+        style="background-image: url('https://cdn.jsdelivr.net/gh/aKevbo/lumassets@39dcf72cfd3d38396758105fcd0a41ac651a0bc1/backrooms/Build/WebGL.jpg');">
+    </div>
+</div>
+
+<script>
+    var gameInstance = UnityLoader.instantiate(
+        "gameContainer",
+        "https://cdn.jsdelivr.net/gh/aKevbo/lumassets@39dcf72cfd3d38396758105fcd0a41ac651a0bc1/backrooms/Build/WebGL.json",
+        { onProgress: UnityProgress }
+    );
+</script>
+
+</body>
+</html>

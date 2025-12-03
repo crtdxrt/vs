@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>DXRT Flash</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+
+  /* THEME VARIABLES */
+  :root {
+    --bg-color:#1a1a2e;
+    --text-color:#fff;
+    --accent-color:#9b59b6;
+    --overlay-bg:rgba(0,0,0,0.3);
+    --header-bg:rgba(17,17,17,0.9);
+    --card-bg:rgba(255,255,255,0.05);
+    --card-border:var(--accent-color);
+    --card-hover-shadow:rgba(155,89,182,0.8);
+    --particle-color:255,255,255;
+  }
+
+  /* ... theme styles omitted for brevity ... */
+
+  body { overflow-x:hidden; background:var(--bg-color); color:var(--text-color); display:flex; justify-content:center; align-items:center; height:100vh; flex-direction:column; }
+  canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; }
+  .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--overlay-bg); backdrop-filter: blur(14px); z-index:-2; }
+
+  #emulator {
+    position:relative;
+    z-index:1;
+    padding:20px;
+    border:2px solid var(--card-border);
+    border-radius:25px;
+    background:var(--card-bg);
+    box-shadow:0 0 25px var(--card-hover-shadow);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+
+  #emulator h2 {
+    color:var(--accent-color);
+    text-shadow:0 0 8px var(--accent-color),0 0 15px rgba(155,89,182,0.5);
+    margin-bottom:15px;
+  }
+
+  #player {
+    width: 640px;
+    height: 480px;
+    margin-top: 10px;
+    border:2px solid var(--accent-color);
+    border-radius:15px;
+    background:rgba(0,0,0,0.1);
+    box-shadow:0 0 15px var(--card-hover-shadow);
+  }
+
+  /* Hide file input */
+  #fileInput { display:none; }
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div class="overlay"></div>
+
+<div id="emulator">
+  <h2>Fancypants Adventure</h2>
+  <input type="file" id="fileInput" accept=".swf">
+  <div id="player"></div>
+</div>
+
+<script>
+// Sync theme with index/settings
+const savedTheme = localStorage.getItem('theme');
+document.body.setAttribute('data-theme', savedTheme || 'dark');
+
+// Particle canvas
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+for(let i=0;i<180;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*3+1,
+    dx:(Math.random()-0.5)*1.2,
+    dy:(Math.random()-0.5)*1.2,
+    alpha:Math.random()*0.5+0.2,
+    phase:Math.random()*Math.PI*2
+  });
+}
+
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.phase+=0.02;
+    ctx.beginPath();
+    ctx.arc(p.x+Math.sin(p.phase)*5,p.y+Math.cos(p.phase)*5,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(var(--particle-color),${p.alpha})`;
+    ctx.fill();
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+
+// Ruffle player
+const ruffle = window.RufflePlayer.newest();
+const player = ruffle.createPlayer();
+document.getElementById("player").appendChild(player);
+
+// AUTO-LOAD SWF from GitHub Pages
+player.load({ url: "https://crtdxrt.github.io/pico/fancypants1.swf" });
+
+// Optional: keep file input if user wants to load another SWF
+document.getElementById("fileInput").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(file){
+    const url = URL.createObjectURL(file);
+    player.load({url});
+  }
+});
+</script>
+</body>
+</html>

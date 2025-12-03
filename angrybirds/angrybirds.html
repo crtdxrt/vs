@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Ultimate Game Stash</title>
+
+<style>
+    /* Hide button if used */
+    #button {
+        display: none;
+    }
+
+    /* Image animation */
+    .imgb_vis {
+        animation: imgb-animation 7s linear;
+    }
+
+    @keyframes imgb-animation {
+        10% { transform: translateX(0); }
+        20% { transform: translateX(100px); }
+        90% { transform: translateX(100px); }
+        100% { transform: translateX(0); }
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background: #231f20;
+    }
+</style>
+
+<!-- Unity loader scripts -->
+<script src="https://cdn.jsdelivr.net/gh/lee2sman/everyday@d45d601d2c4d60adf809a0b677c00b7d12aba7e9/96/TemplateData/UnityProgress.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/gertdoro/UnityExplorer@cffa09e09790018403c996d37adb6c4450e8f6c6/Runtime/birds/birds.js"></script>
+
+</head>
+<body>
+
+<div class="webgl-content">
+    <div id="gameContainer"
+         style="width: 100vw; height: 100vh; margin: 0; padding: 0; border: 0; background: rgb(35,31,32);">
+         
+        <canvas id="canvas" width="960" height="600" style="cursor: default;"></canvas>
+
+        <div class="logo Dark" style="display: none;"></div>
+        <div class="progress Dark" style="display: none;">
+            <div class="empty" style="width: 0%;"></div>
+            <div class="full" style="width: 100%;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Unity instantiate -->
+<script>
+var gameInstance = UnityLoader.instantiate(
+    "gameContainer",
+    "https://cdn.jsdelivr.net/gh/gertdoro/UnityExplorer@cffa09e09790018403c996d37adb6c4450e8f6c6/Runtime/birds/birds.json",
+    {
+        onProgress: UnityProgress,
+        Module: {
+            onRuntimeInitialized: function () {
+                UnityProgress(gameInstance, "complete");
+            }
+        }
+    }
+);
+</script>
+
+</body>
+</html>

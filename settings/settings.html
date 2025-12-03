@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Astatine - Settings</title>
+<link rel="icon" type="image/png" href="A.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; }
+
+  :root {
+    --bg-color:#1a1a2e;
+    --text-color:#fff;
+    --sidebar-bg:#111;
+    --accent-color:#9b59b6;
+    --overlay-bg:rgba(0,0,0,0.3);
+    --header-bg:rgba(17,17,17,0.9);
+  }
+
+  [data-theme="light"] {
+    --bg-color:#f5f5f5;
+    --text-color:#111;
+    --sidebar-bg:#fff;
+    --overlay-bg:rgba(255,255,255,0.3);
+    --header-bg:rgba(255,255,255,0.9);
+  }
+
+  [data-theme="dark"] {
+    --bg-color:#0d0d0d;
+    --text-color:#fff;
+    --sidebar-bg:#111;
+    --overlay-bg:rgba(0,0,0,0.5);
+    --header-bg:rgba(17,17,17,0.95);
+  }
+
+  /* NEW THEMES */
+  [data-theme="shock-yellow"] {
+    --bg-color: #fff8e1;
+    --text-color: #222;
+    --sidebar-bg: #f5f5dc;
+    --accent-color: #ffeb3b;
+    --overlay-bg: rgba(255,235,59,0.2);
+    --header-bg: rgba(255,235,59,0.1);
+  }
+
+  [data-theme="rogue-red"] {
+    --bg-color: #2b0000;
+    --text-color: #ffcccc;
+    --sidebar-bg: #3a0000;
+    --accent-color: #e74c3c;
+    --overlay-bg: rgba(231,76,60,0.2);
+    --header-bg: rgba(58,0,0,0.8);
+  }
+
+  [data-theme="matte-orange"] {
+    --bg-color: #111;
+    --text-color: #fff5e6;
+    --sidebar-bg: #1a1a1a;
+    --accent-color: #ff8c00;
+    --overlay-bg: rgba(255,140,0,0.2);
+    --header-bg: rgba(26,26,26,0.9);
+  }
+
+  [data-theme="matte-white"] {
+    --bg-color: #000;
+    --text-color: #383838;
+    --sidebar-bg: #111;
+    --accent-color: #ffffff;
+    --overlay-bg: rgba(255,255,255,0.1);
+    --header-bg: rgba(17,17,17,0.95);
+  }
+
+[data-theme="matte-blue"] {
+  --bg-color: #0d1117;
+  --text-color: #cce0ff;
+  --sidebar-bg: #161b26;
+  --accent-color: #4a90e2;
+  --overlay-bg: rgba(74,144,226,0.2);
+  --header-bg: rgba(22,27,38,0.9);
+}
+
+[data-theme="sunset"] {
+  --bg-color: #1a0f0f;
+  --text-color: #ffd8a8;
+  --sidebar-bg: #2c1612;
+  --accent-color: #ff6f3c;
+  --overlay-bg: rgba(255,111,60,0.2);
+  --header-bg: rgba(44,22,18,0.9);
+}
+
+[data-theme="aurora"] {
+  --bg-color: #0d0a1a;
+  --text-color: #a0f0ff;
+  --sidebar-bg: #151124;
+  --accent-color: #ff77cc;
+  --overlay-bg: rgba(255,119,204,0.2);
+  --header-bg: rgba(21,17,36,0.9);
+}
+
+[data-theme="golden"] {
+  --bg-color: #1c1105;
+  --text-color: #fff1c2;
+  --sidebar-bg: #2a190a;
+  --accent-color: #ffcc33;
+  --overlay-bg: rgba(255,204,51,0.2);
+  --header-bg: rgba(42,25,10,0.9);
+}
+
+  body { overflow-x:hidden; background:var(--bg-color); color:var(--text-color); }
+
+  canvas { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; }
+  .overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:var(--overlay-bg); backdrop-filter:blur(14px); z-index:-2; }
+
+  .sidebar {
+    position:fixed; left:0; top:0; bottom:0; width:220px; background:var(--sidebar-bg);
+    display:flex; flex-direction:column; align-items:center; padding-top:50px; z-index:2; border-right:2px solid var(--accent-color);
+  }
+  .logo { font-size:2em; font-weight:700; color:var(--accent-color); margin-bottom:30px; text-align:center; }
+  .sidebar button { width:160px; margin:10px 0; padding:10px 0; border:none; border-radius:10px; font-weight:600; cursor:pointer; background:var(--accent-color); color:var(--text-color); transition:0.3s; }
+  .sidebar button:hover { background:linear-gradient(90deg, #ffffff 0%, var(--accent-color) 100%); color:#111; box-shadow:0 0 15px var(--accent-color); }
+  .sidebar-text { width:80%; margin-top:20px; font-size:0.9em; color:var(--text-color); text-align:center; line-height:1.5; border-top:1px solid var(--accent-color); padding-top:15px; }
+
+  .header-bar { position:fixed; top:0; left:220px; right:0; height:140px; background:var(--header-bg); backdrop-filter:blur(10px); z-index:3; display:flex; flex-direction:column; justify-content:center; padding:0 30px; border-bottom:2px solid var(--accent-color); }
+  .header-bar h1 { font-size:2.5em; font-weight:700; color:var(--text-color); text-shadow:0 0 8px rgba(0,0,0,0.5); margin-bottom:5px; }
+  .header-bar #typed-text { color:var(--accent-color); text-shadow:0 0 8px var(--accent-color),0 0 15px rgba(155,89,182,0.5); }
+  .header-bar p { color:var(--text-color); font-size:1.1em; }
+
+  .section { margin-left:240px; padding:20px; }
+  .section h2 { color:var(--accent-color); margin-bottom:10px; }
+  .section button {
+    margin:6px; padding:12px 22px; border:none; border-radius:10px;
+    background:var(--accent-color); color:var(--text-color); font-weight:600;
+    cursor:pointer; transition:0.3s; font-size:1em;
+  }
+  .section button:hover { background:#fff; color:#111; }
+
+  .modal {
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,0.7); z-index:10; justify-content:center; align-items:center;
+    animation:fadeIn 0.4s ease forwards;
+  }
+  @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+  .modal-content {
+    background:var(--sidebar-bg); color:var(--text-color);
+    padding:25px; border-radius:15px; text-align:center;
+    border:2px solid var(--accent-color);
+    width:85%; max-width:420px;
+    transform:scale(0.8); animation:popIn 0.4s ease forwards;
+  }
+  @keyframes popIn { from{transform:scale(0.8);opacity:0;} to{transform:scale(1);opacity:1;} }
+  .modal-content ul { list-style:none; padding:0; margin:10px 0; }
+  .modal-content li {
+    margin:8px 0; font-size:0.95em;
+    color:var(--text-color); background:rgba(255,255,255,0.05);
+    border-radius:8px; padding:8px;
+  }
+  .modal-content button {
+    margin-top:15px; background:var(--accent-color); color:var(--text-color);
+    border:none; padding:8px 16px; border-radius:10px; cursor:pointer;
+  }
+
+  .credits {
+    position:fixed; bottom:10px; left:240px; right:20px;
+    background:var(--header-bg); border:1px solid var(--accent-color);
+    border-radius:15px; padding:10px 20px; font-size:0.9em;
+    color:var(--text-color); z-index:5; text-align:center;
+  }
+  .credits a { color:var(--accent-color); text-decoration:none; transition:0.3s; }
+  .credits a:hover { color:#fff; text-shadow:0 0 10px var(--accent-color), 0 0 20px var(--accent-color); }
+</style>
+</head>
+<body>
+<canvas id="particles"></canvas>
+<div class="overlay"></div>
+
+<div class="sidebar">
+  <div class="logo">Astatine</div>
+  <button onclick="window.location.href='index.html'">Home</button>
+  <div class="sidebar-text">
+    <p>Change your preferences or reset to defaults.</p>
+  </div>
+</div>
+
+<div class="header-bar">
+  <h1>Settings - <span id="typed-text"></span></h1>
+  <p>Customize your Astatine experience.</p>
+</div>
+
+<!-- Themes -->
+<div class="section" style="margin-top:160px;">
+  <h2>Choose Theme</h2>
+  <button onclick="setTheme('default')">Default</button>
+  <button onclick="setTheme('light')">Light</button>
+  <button onclick="setTheme('dark')">Dark</button>
+  <button onclick="setTheme('shock-yellow')">Shock Yellow</button>
+  <button onclick="setTheme('rogue-red')">Rogue Red</button>
+  <button onclick="setTheme('matte-orange')">Matte Orange</button>
+  <button onclick="setTheme('matte-white')">Matte White</button>
+  <button onclick="setTheme('matte-blue')">Matte Blue</button>
+  <button onclick="setTheme('sunset')">Sunset</button>
+  <button onclick="setTheme('aurora')">Aurora</button>
+  <button onclick="setTheme('golden')">Golden</button>
+</div>
+
+<!-- Backup Section -->
+<div class="section">
+  <h2>Backup Sites</h2>
+  <button onclick="openBackupModal()">View Backups</button>
+</div>
+
+<div class="modal" id="backupModal">
+  <div class="modal-content">
+    <h3>Backup Sites</h3>
+    <ul>
+      <li>studyhall-1-5.vercel.app</li>
+      <li>astatine-1-5.vercel.app</li>
+      <li>stew-brewer.vercel.app</li>
+    </ul>
+    <button onclick="closeBackupModal()">Close</button>
+  </div>
+</div>
+
+<div class="credits">
+  © 2025 Astatine Project | Designed by 
+  <a href="https://www.youtube.com/@crtdxrt" target="_blank">crtdxrt</a>
+</div>
+
+<script>
+// Theme
+const savedTheme = localStorage.getItem('theme');
+if(savedTheme){
+  if(savedTheme==='default') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+// Typing
+const text="Settings";
+const typedSpan=document.getElementById("typed-text");
+let i=0;
+function typeEffect(){ if(i<text.length){ typedSpan.innerHTML+=text.charAt(i); i++; setTimeout(typeEffect,150);} }
+typeEffect();
+
+// Theme switch
+function setTheme(theme){
+  if(theme==='default') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+}
+
+// Backup Modal
+function openBackupModal(){ document.getElementById('backupModal').style.display='flex'; }
+function closeBackupModal(){ document.getElementById('backupModal').style.display='none'; }
+
+// Cloaking
+function cloakAsBlob(){
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], {type:'text/html'});
+  const blobUrl = URL.createObjectURL(blob);
+  window.open(blobUrl, '_blank');
+}
+
+function cloakAsBlank(){
+  const win = window.open('about:blank', '_blank');
+  const doc = win.document;
+  doc.open();
+  doc.write(document.documentElement.outerHTML);
+  doc.close();
+}
+
+// Particles
+const canvas=document.getElementById('particles');
+const ctx=canvas.getContext('2d');
+canvas.width=window.innerWidth; canvas.height=window.innerHeight;
+let particles=[];
+for(let i=0;i<180;i++){
+  particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*3+1,dx:(Math.random()-0.5)*1.2,dy:(Math.random()-0.5)*1.2,alpha:Math.random()*0.5+0.2,phase:Math.random()*Math.PI*2});
+}
+function animate(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.phase+=0.02;
+    ctx.beginPath();
+    ctx.arc(p.x+Math.sin(p.phase)*5,p.y+Math.cos(p.phase)*5,p.r,0,Math.PI*2);
+    ctx.fillStyle=`rgba(255,255,255,${p.alpha})`;
+    ctx.fill();
+    p.x+=p.dx; p.y+=p.dy;
+    if(p.x<0||p.x>canvas.width)p.dx*=-1;
+    if(p.y<0||p.y>canvas.height)p.dy*=-1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{canvas.width=window.innerWidth;canvas.height=window.innerHeight;});
+</script>
+</body>
+</html>
+
+
